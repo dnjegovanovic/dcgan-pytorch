@@ -16,3 +16,4 @@ dataset/data/
 .venv
 env/
 venv/
+.idea/
