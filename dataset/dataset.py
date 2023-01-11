@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, random_split
 
 class Data(pl.LightningDataModule):
     def __init__(self, data_dir, batch_size, num_workers):
-        super.__init__()
+        super().__init__()
         self.data_dir = data_dir
         self.batch_size = batch_size
         self.num_workers = num_workers
@@ -29,7 +29,7 @@ class Data(pl.LightningDataModule):
         MNIST(self.data_dir, train=True, download=True)
         MNIST(self.data_dir, train=False, download=True)
 
-    def setup(self, stage: str) -> None:
+    def setup(self, stage: None):
         # Assign train/val datasets for use in dataloaders
         if stage == "fit" or stage is None:
             mnist_full = MNIST(self.data_dir, train=True, transform=self.transform)
@@ -41,19 +41,19 @@ class Data(pl.LightningDataModule):
                 self.data_dir, train=False, transform=self.transform
             )
 
-    def train_dataloader(self) -> DataLoader:
+    def train_dataloader(self):
         return DataLoader(
             self.mnist_train,
             batch_size=self.batch_size,
             num_workers=self.num_workers,
         )
 
-    def val_dataloader(self) -> DataLoader:
+    def val_dataloader(self):
         return DataLoader(
             self.mnist_val, batch_size=self.batch_size, num_workers=self.num_workers
         )
 
-    def test_dataloader(self) -> DataLoader:
+    def test_dataloader(self):
         return DataLoader(
             self.mnist_test, batch_size=self.batch_size, num_workers=self.num_workers
         )
