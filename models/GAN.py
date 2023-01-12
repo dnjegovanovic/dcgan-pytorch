@@ -8,7 +8,7 @@ import torch.nn.functional as F
 
 
 class GANModel(pl.LightningModule):
-    def __int__(
+    def __init__(
         self,
         channels,
         width,
@@ -20,13 +20,17 @@ class GANModel(pl.LightningModule):
         batch_size: int = 256,
         **kwargs,
     ):
-        super().__int__()
+        super().__init__()
         self.save_hyperparameters()
+
+        # networks
         data_shape = (channels, width, height)
-        self.generator = GM.GeneratorModel(latent_dim, data_shape)
-        self.discriminator = Discriminator(data_shape)
-        self.validation_z = torch.rand(8, latent_dim)
-        self.example_input_array = torch.zeros(2, latent_dim)
+        self.generator = GM(latent_dim=self.hparams.latent_dim, img_shape=data_shape)
+        self.discriminator = Discriminator(img_shape=data_shape)
+
+        self.validation_z = torch.randn(8, self.hparams.latent_dim)
+
+        self.example_input_array = torch.zeros(2, self.hparams.latent_dim)
 
     def forward(self, z):
         return self.generator(z)
@@ -43,6 +47,7 @@ class GANModel(pl.LightningModule):
 
         # train generator
         if optimizer_idx == 0:
+
             # generate images
             self.generated_imgs = self(z)
 

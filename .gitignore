@@ -7,7 +7,8 @@ __pycache__/
 .Python
 build/
 dist/
-dataset/data/
+data/data/
+lightning_logs/
 # Unit test / coverage reports
 .tox/
 
